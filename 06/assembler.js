@@ -1,0 +1,21 @@
+const fs = require("fs");
+const parser = require("./parser");
+
+let fileName = process.argv[2];
+
+fs.readFile(fileName, "utf-8", (err, data) => {
+  if (err) {
+    throw err;
+  }
+  data = data.split("\r\n");
+  // 1 get address
+  parser([...data], true);
+  // 2 parse instructions
+  const binaryOut = parser(data);
+  fileName = fileName.split(".")[0];
+  fs.writeFile(fileName + ".hack", binaryOut, (err) => {
+    if (err) {
+      throw err;
+    }
+  });
+});
